@@ -1,36 +1,47 @@
-import java.awt.BasicStroke;
+// MADE AFTER THIS MODEL https://stackoverflow.com/questions/28809000/how-to-insert-jpanel-beside-a-grid
+
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.awt.Dimension;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class drawBoard extends JPanel {
-    private static Integer apple_x, apple_y;
+    private static final Dimension pref_size = new Dimension(20, 20);
+    private static JPanel panel;
 
-    public drawBoard(JFrame frame) {
-
-        initBoard(frame);
+    public drawBoard() {
+        
+        createMap(40, 40);
 	}
 
-    private void initBoard(JFrame frame) {
-        //TODO Spawn apple
-        //TODO snake
+    public void createMap(int maxX, int maxY) {
+        //create 40x40 grid of panels for the snake to move around in
+        for (int i=1; i < maxX+1; i++) {
+            for (int j=1; j < maxY+1; j++) {
 
-        //split window into 40x40 grid
-        frame.removeAll();
-        frame.repaint();
+                panel = new JPanel();
+                add(panel);
+                panel.setPreferredSize(pref_size);
+                String name = String.format("[%d, %d]", i, j);
+                setLayout(new GridLayout(maxX, maxY, 1, 1)); //change gap to 0 after tests are done
+                setBackground(Color.GRAY); 
+                panel.setName(name);
 
-        frame.setLayout(new GridLayout(40, 40, 0, 0));
+            }
+        }
 
-        //add keylistener
-        frame.addKeyListener(new KeyAdapter() {
+        //key listener
+        //use model for grid movement 
+        addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 char c = e.getKeyChar();
@@ -42,45 +53,55 @@ public class drawBoard extends JPanel {
                     //snake go down
                 }
                 if (c == KeyEvent.VK_RIGHT) {
-                    //snake go down
+                    //snake go right
                 }
                 if (c == KeyEvent.VK_LEFT) {
-                    //snake go down
+                    //snake go left
                 }
             }
         });
 
-        //create map
-        createMap(40, 40);
+    }
+
+    private static void createFrame() {
+        JFrame frame = new JFrame("Snake");
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(new drawBoard(), BorderLayout.CENTER);
+        frame.pack();
+        frame.setLocationByPlatform(true);
+        frame.setVisible(true);
+        frame.setResizable(false);
         
-        //place random apple
-        //randomApple();
-    }
+        //create snake entity
+        
+    };
 
-    private void createMap(int maxX, int maxY) {
-        String [ ] [ ] map = new String [40][40];
-
-            for (int i=1; i < map.length; i++) {
-                for (int j=1; i < map.length; j++) {
-                    map [i][j] = "["+ i + "," + j + "]";
-
-                    JPanel panel = new JPanel();
-                    frame.add(panel);
-                    String name = String.format("[%d, %d]", i, j);
-                    frame.setLayout(new GridLayout(40, 40, 1, 1));
-                    frame.setBackground(Color.GRAY); //to be changed to make map all black after testing
-                    panel.setName(name);
-
-                    System.out.println(map[i][j]);
-                }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                //create grid map
+                createFrame();
             }
+        });
+    }
+}
+
+class createSnake {
+
+    public createSnake() {
+        Random rand = new Random();
+        HashMap<Integer, Integer> snakeMap = new HashMap<Integer, Integer>();
+
+        //random spawining point
+        int snake_x = rand.nextInt(40);
+        int snake_y = rand.nextInt(40);
+
+        //Create snake entity
+        plsaceEntity(this, snake_x, snake_y);
     }
 
-    /*private void randomApple() {
-        Random rand = new Random();
+    // TODO snake controls  use map!!!!!
 
-        apple_x = rand.nextInt(40);
-        apple_y = rand.nextInt(40);
-    }*/
 }
 

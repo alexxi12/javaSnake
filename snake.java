@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
 import java.awt.font.TextAttribute;
 import java.util.Map;
 
@@ -60,7 +61,8 @@ public class snake {
 
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                new drawBoard(frame);
+                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+                new drawBoard();
                 
             }
 
